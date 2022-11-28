@@ -6,7 +6,7 @@ const Header = ({ config }) => {
     <div className={styles.container}>
       <Link href="/">
         <a>
-          <b>Home</b>
+          <b>Irrigation Scheduler</b>
         </a>
       </Link>
       <div className={styles.wrapper}>

@@ -1,15 +1,15 @@
 const data = [
   {
-    name: "Crop",
-    route: "crop",
+    name: "Reference Evapotranspiration",
+    route: "ret",
   },
   {
-    name: "Irrigation",
-    route: "irrigation",
+    name: "Crop Evapotranspiration",
+    route: "cet",
   },
   {
-    name: "Water Req Calculator",
-    route: "wrc",
+    name: "Irrigation Scheduling",
+    route: "scheduling",
   },
 ];
 
