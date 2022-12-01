@@ -14,3 +14,18 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.page_container {
+  margin: 0 auto;
+  width: 60%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 100%;
+  padding: 10px 15px;
+  background: #fff;
+  border-radius: 6px;
+}
