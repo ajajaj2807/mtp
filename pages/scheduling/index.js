@@ -1,22 +1,11 @@
 import ModuleLayout from "../../components/ModuleLayout";
-
-const HargreavesMethod = () => {
-  return <div>IW/CPE Method</div>;
-};
-
-const FAOPenmanMethod = () => {
-  return <div>Soil-Water Balance Method</div>;
-};
+import IWCPEMethod from "./IWCPEMethod";
 
 const subModules = [
   {
     title: "IW/CPE Method",
-    comp: <HargreavesMethod />,
-  },
-  {
-    title: "Soil-Water Balance Method",
-    comp: <FAOPenmanMethod />,
-  },
+    comp: <IWCPEMethod />
+  }
 ];
 
 const Scheduling = () => {

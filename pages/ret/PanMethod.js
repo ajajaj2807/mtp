@@ -1,219 +1,131 @@
-import { useEffect, useMemo, useState } from "react";
-// import InputTaker from "../../components/InputTaker";
-// import GetTableInput from "../../components/GetTableInput";
-import { ProgressSteps, Step } from "baseui/progress-steps";
-import { Button } from "baseui/button";
-import ListInput from "../../components/ListInput";
-import Select from "baseui/select/select-component";
-import OptionInput from "../../components/OptionInput";
-import { Radio, RadioGroup } from "baseui/radio";
-const vars = [
-  {
-    name: "other_data",
-    title: "Other Input Data",
-    type: "list",
-    vars: [
-      { name: "avg_wind_speed", title: "Avg. Wind Speed", value: 0 },
-      { name: "avg_rh", value: 0, title: "Avg. Relative Humidity" },
-      { name: "fetch", value: 0, title: "Fetch" },
-    ],
-  },
-  {
-    name: "pan_type",
-    title: "Pan Type",
-    type: "option",
-    options: [
-      { name: "Class A Pan", key: "1" },
-      { name: "Colorado Sunken Pan", key: "2" },
-    ],
-    value: "0",
-  },
-  {
-    name: "pan_sitting",
-    title: "Pan Sitting",
-    type: "option",
-    options: [
-      { name: "Pan placed in short green crop area", key: "1" },
-      { name: "Pan placed in dry fallow area", key: "2" },
-    ],
-    value: [],
-  },
-  {
-    name: "pan_condition",
-    title: "Pan Condition",
-    type: "option",
-    options: [
-      { name: "Pan painted with Black", key: "1" },
-      { name: "Pan not painted with Black", key: "2" },
-    ],
-    value: [],
-  },
-  {
-    name: "screen_condition",
-    title: "Pan Screen Condition",
-    type: "option",
-    options: [
-      { name: "Pan mounted with a screen", key: "1" },
-      { name: "Pan not mounted with a screen", key: "2" },
-    ],
-    value: [],
-  },
-];
+import DynamicForm from "../../components/DynamicForm";
 
-const rhOptions = [
-  { title: "Low (<40%)", id: "0" },
-  { title: "Medium (40 to 70%)", id: "1" },
-  { title: "High(>70%)", id: "2" },
-];
-
-const wsOptions = [
-  { title: "Light (<2)", id: "0" },
-  { title: "Moderate (2-5)", id: "1" },
-  { title: "Strong (5-8)", id: "2" },
-  { title: "Very Strong (>8)", id: "3" },
-];
-
-const fetchOptions = [
-  { title: "1", id: "0" },
-  { title: "10", id: "1" },
-  { title: "100", id: "2" },
-  { title: "1000", id: "3" },
+const config = [
+  [
+    {
+      type: "conditional",
+      title: "Are exact weather data known?",
+      options: [
+        { key: 0, name: "Yes" },
+        { key: 1, name: "No" }
+      ],
+      comps: [
+        {
+          case: "Yes",
+          data: [
+            {
+              name: "ws",
+              type: "list",
+              title: "Wind Speed",
+              minValue: 0,
+              maxValue: 50
+            },
+            {
+              name: "rh",
+              type: "list",
+              title: "Relative Humidity",
+              minValue: 0,
+              maxValue: 50
+            },
+            {
+              name: "fetch",
+              type: "list",
+              title: "Fetch",
+              minValue: 0,
+              maxValue: 50
+            }
+          ]
+        },
+        {
+          case: "No",
+          data: [
+            {
+              type: "option",
+              name: "rh",
+              title: "Relative Humidity",
+              options: [
+                { name: "Low (<40%)", key: 0 },
+                { name: "Medium (40 to 70%)", key: 1 },
+                { name: "High (>70%)", key: 2 }
+              ]
+            },
+            {
+              type: "option",
+              name: "ws",
+              title: "Wind Speed",
+              options: [
+                { name: "Light (< 2m/s)", key: 0 },
+                { name: "Moderate (2 to 5 m/s)", key: 1 },
+                { name: "Strong (5 to 8 m/s)", key: 2 },
+                { name: "Very Strong (> 8m/s)", key: 3 }
+              ]
+            },
+            {
+              type: "option",
+              name: "fetch",
+              title: "Fetch",
+              options: [
+                { name: "1m", key: 0 },
+                { name: "10m", key: 1 },
+                { name: "100m", key: 2 },
+                { name: "1000m", key: 3 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      type: "option",
+      name: "pan_type",
+      title: "Select Pan Type",
+      options: [
+        { name: "Class A Pan", key: 0 },
+        { name: "Colorado Sunken Pan", key: 1 }
+      ]
+    },
+    {
+      type: "option",
+      name: "pan_sitting",
+      title: "Select Pan Sitting",
+      options: [
+        { name: "Placed in a dry fallow area", key: 0 },
+        { name: "Placed in a short green crop", key: 1 },
+        { name: "Placed in tall crops and enclosed by a small area", key: 2 }
+      ]
+    }
+  ],
+  [
+    {
+      type: "option",
+      name: "pan_condition",
+      title: "Select Pan Condition",
+      options: [
+        { name: "Pan painted with black", key: 0 },
+        { name: "Pan not painted with black", key: 1 },
+        { name: "Pan mounted with a screen", key: 2 },
+        { name: "Pan not mounted with a screen", key: 3 }
+      ]
+    }
+  ],
+  [
+    {
+      type: "grid",
+      name: "pan_evap_data",
+      title: "Input Pan Evaporation Data",
+      variables: ["RET", "Depth (mm)"],
+      n: 7
+    }
+  ]
 ];
 
 const PanMethod = () => {
-  const [variables, setVariables] = useState(vars);
-  const [start, setStart] = useState(1);
-  const [length, setLength] = useState(7);
-  const cols = useMemo(
-    () => [
-      { field: "key", headerName: "Date" },
-      { headerName: "Pan Evaporation Data", field: "pan_evap", editable: true },
-    ],
-    []
-  );
-  const [data, setData] = useState([]);
-  const [rh, setRh] = useState([]);
-  const [ws, setWs] = useState([]);
-  const [fet, setFetch] = useState([]);
-
-  const setRHHelper = (val) => {
-    setRh(val);
+  const onFinish = (data) => {
+    console.log(data);
   };
-
-  const setWSHelper = (val) => {
-    setWs(val);
-  };
-
-  useEffect(() => {
-    const current_length = data.length;
-    const req = length - current_length;
-    for (var i = 0; i < req; i = i + 1) {
-      const obj = {};
-      cols.forEach((col) => {
-        obj[col.field] = 0;
-      });
-      obj["key"] = i;
-      data.push(obj);
-    }
-  }, [length, data, cols]);
-  const [current, setCurrent] = useState(0);
-  const [isWeatherDataKnow, setIsWeatherDataKnown] = useState(0);
-  const handleOne = (ok) => {
-    setIsWeatherDataKnown(ok);
-    setCurrent(1);
-  };
-
-  return (
-    <div>
-      <h4>ETo by Pan Method using Exact Weather data</h4>
-      <div className="wrapper">
-        {/* <InputTaker variables={variables} setVariables={setVariables} /> */}
-        {/* <div>
-          <GetTableInput cols={cols} data={data} setData={setData} />
-        </div> */}
-        <ProgressSteps current={current}>
-          <Step title="Step 1">
-            <p>Are exact weather data known?</p>
-            <Button size="compact" onClick={() => handleOne(1)}>
-              Yes
-            </Button>
-            <Button size="compact" onClick={() => handleOne(0)}>
-              No
-            </Button>
-          </Step>
-          <Step title="Step 2">
-            {isWeatherDataKnow ? (
-              <div>
-                <ListInput
-                  vars={variables[0].vars}
-                  variables={variables}
-                  name="Please input the known values here"
-                  setVariables={setVariables}
-                />
-              </div>
-            ) : (
-              <>
-                <b>Please choose the most accurate option</b>
-                {/* <div> */}
-                <h3>Select Mean Relative Humidity:</h3>
-                <RadioGroup
-                  value={rh}
-                  onChange={(e) => setRHHelper(e.currentTarget.value)}
-                  name={"Mean Relative Humidity"}
-                >
-                  {rhOptions.map((option) => (
-                    <Radio key={option.id} value={option.id}>
-                      {option.title}
-                    </Radio>
-                  ))}
-                </RadioGroup>
-                <h3>Select Wind Speed:</h3>
-                <RadioGroup
-                  value={ws}
-                  onChange={(e) => setWSHelper(e.currentTarget.value)}
-                  name={"Wind Speed"}
-                >
-                  {wsOptions.map((option) => (
-                    <Radio key={option.id} value={option.id}>
-                      {option.title}
-                    </Radio>
-                  ))}
-                </RadioGroup>
-                <h3>Select Fetch:</h3>
-                <RadioGroup
-                  value={fet}
-                  onChange={(e) => setFetch(e.currentTarget.value)}
-                  name={"Fetch"}
-                >
-                  {fetchOptions.map((option) => (
-                    <Radio key={option.id} value={option.id}>
-                      {option.title}
-                    </Radio>
-                  ))}
-                </RadioGroup>
-                {/* </div> */}
-              </>
-            )}
-            <Button size="compact" onClick={() => setCurrent(0)}>
-              Back
-            </Button>
-            <Button size="compact" onClick={() => setCurrent(2)}>
-              Next
-            </Button>
-          </Step>
-          <Step title="Step 3">
-            <p>Please Select Pan Type</p>
-            <Button size="compact" onClick={() => setCurrent(1)}>
-              Back
-            </Button>
-            <Button size="compact" onClick={() => setCurrent(2)}>
-              Next
-            </Button>
-          </Step>
-        </ProgressSteps>
-      </div>
-    </div>
-  );
+  return <DynamicForm config={config} onFinish={onFinish} />;
 };
 
 export default PanMethod;

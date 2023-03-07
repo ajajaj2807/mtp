@@ -1,30 +1,20 @@
 import { RadioGroup, Radio, ALIGN } from "baseui/radio";
 import styles from "../styles/OptionInput.module.css";
 
-const OptionInput = ({ name, value, options, variables, setVariables }) => {
-  const setValue = (val) => {
-    const new_vars = [...variables];
-    new_vars = new_vars.map((v) => {
-      if (v.title == name) {
-        v.value = val;
-      }
-      return v;
-    });
-    setVariables(new_vars);
-  };
+const OptionInput = ({ name, selectedOption, options, title, onChange }) => {
   return (
     <div className={styles.container}>
       <p>
-        <b>{name}</b>
+        <b>{title}</b>
       </p>
       <RadioGroup
-        value={value}
-        onChange={(e) => setValue(e.currentTarget.value)}
+        value={selectedOption}
+        onChange={(e) => onChange(e.currentTarget.value)}
         name={name}
         align={ALIGN.vertical}
       >
         {options.map((option) => (
-          <Radio key={option.key} value={option.key}>
+          <Radio key={option.key} value={option.name}>
             {option.name}
           </Radio>
         ))}

@@ -1,27 +1,36 @@
 import ModuleLayout from "../../components/ModuleLayout";
+import DailyFAOMethod from "./DailyFAOMethod";
+import HargreavesMethod from "./HargreavesMethod";
+import HourlyFAOMethod from "./HourlyFAOMethod";
+import MissingDataFAOMethod from "./MissingDataFAOMethod";
+import MonthlyFAOMethod from "./MonthlyFAOMethod";
 import PanMethod from "./PanMethod";
-
-const HargreavesMethod = () => {
-  return <div>Hargreaves Method</div>;
-};
-
-const FAOPenmanMethod = () => {
-  return <div>FAO Penman Method</div>;
-};
 
 const subModules = [
   {
     title: "Pan Method",
-    comp: <PanMethod />,
+    comp: <PanMethod />
   },
   {
     title: "Hargreaves Method",
-    comp: <HargreavesMethod />,
+    comp: <HargreavesMethod />
   },
   {
-    title: "FAO Penman-Monteith Method",
-    comp: <FAOPenmanMethod />,
+    title: "Hourly FAO Penman-Monteith Method",
+    comp: <HourlyFAOMethod />
   },
+  {
+    title: "Daily FAO Penman-Monteith Method",
+    comp: <DailyFAOMethod />
+  },
+  {
+    title: "Monthly FAO Penman-Monteith Method",
+    comp: <MonthlyFAOMethod />
+  },
+  {
+    title: "Missing Data FAO Method",
+    comp: <MissingDataFAOMethod />
+  }
 ];
 
 const Ret = () => {
