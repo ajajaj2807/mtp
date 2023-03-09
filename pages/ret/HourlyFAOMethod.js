@@ -101,9 +101,91 @@ const config = [
   ]
 ];
 
+function calculateET0(n, meanTemp, rh, solarRadiation, isDaytime, windSpeed) {
+  const Gsc = 0.082; // Solar constant
+  // const sigma = 0.000000004903; // Stefan-Boltzmann constant
+  const lambda = 2.45; // Latent heat of vaporization
+  const cp = 1.013e-3; // Specific heat at constant pressure
+  const rho = 1.225; // Air density at sea level and 15°C
+  const rah = 208; // Aerodynamic resistance for heat transfer
+
+  let ET0 = [];
+
+  for (let i = 0; i < n; i++) {
+    let T = meanTemp[i] + 273.16; // Convert temperature to Kelvin
+    let es = 0.6108 * Math.exp((17.27 * T) / (T + 237.3)); // Saturation vapor pressure
+    let ea = (rh[i] / 100) * es; // Actual vapor pressure
+    let Rn = isDaytime ? solarRadiation[i] * (1 - 0.23) : 0; // Net radiation
+    let G = (Gsc * solarRadiation[i] * 3600) / 1000000; // Soil heat flux
+    let delta = (4098 * es) / Math.pow(T - 273.16 + 237.3, 2); // Slope of the saturation vapor pressure curve
+    let gamma = (cp * rho) / (lambda * rah); // Psychrometric constant
+    let numerator =
+      delta * (Rn - G) +
+      gamma * (900 / (T - 273.16)) * windSpeed[i] * (es - ea);
+    let denominator = delta + gamma * (1 + 0.34 * windSpeed[i]);
+    ET0[i] = numerator / denominator;
+  }
+
+  return ET0;
+}
+
+const getVars = (data) => {
+  let n, meanTemp, rh, solarRadiation, isDaytime, windSpeed;
+  n = Number(data.n);
+  meanTemp = new Array(n);
+  rh = new Array(n);
+  windSpeed = new Array(n);
+  solarRadiation = new Array(n);
+
+  data.temp_and_rh_data.forEach((day, i) => {
+    let val = day["Mean Temp (C)"];
+    val = Number(val);
+    meanTemp[i] = val;
+    val = day["Relative Humidity"];
+    val = Number(val);
+    rh[i] = val;
+  });
+
+  data.hourly_wind_speed_data.forEach((day, i) => {
+    let val = day["Hourly Wind Speed"];
+    val = Number(val);
+    windSpeed[i] = val;
+  });
+
+  data.solar_radiation_data.forEach((day, i) => {
+    let val = day["Solar Radiation (Rs)"];
+    val = Number(val);
+    solarRadiation[i] = val;
+  });
+
+  isDaytime = data.day_time === "Day-time calculation";
+
+  return {
+    n,
+    meanTemp,
+    rh,
+    solarRadiation,
+    isDaytime,
+    windSpeed
+  };
+};
+
 const HourlyFAOMethod = () => {
   const onFinish = (data) => {
     console.log(data);
+    const { n, meanTemp, rh, solarRadiation, isDaytime, windSpeed } = getVars(
+      data
+    );
+    const res = calculateET0(
+      n,
+      meanTemp,
+      rh,
+      solarRadiation,
+      isDaytime,
+      windSpeed
+    );
+
+    console.log(res);
   };
   return <DynamicForm config={config} onFinish={onFinish} />;
 };

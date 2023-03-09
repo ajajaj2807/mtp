@@ -126,11 +126,125 @@ const config = [
   ]
 ];
 
+const calculateMonthlyReferenceET = (
+  avgMin,
+  avgMax,
+  rh,
+  wind,
+  solarRad,
+  Tnext,
+  Tknown
+) => {
+  // Set constants
+  var gamma = 0.665e-3; // Psychrometric constant (kPa/°C)
+  var G = 0; // Soil heat flux (MJ/m^2/day) - set to 0 for monthly calculation
+
+  // Initialize output array
+  var ETrefMonthly = [];
+
+  // Loop through each month
+  for (var i = 0; i < avgMin.length; i++) {
+    // Calculate mean temperature
+    var avgTemp;
+    avgTemp = (avgMin[i] + avgMax[i]) / 2.0;
+
+    // Calculate actual vapor pressure (kPa)
+    var ea =
+      0.6108 *
+      Math.exp((17.27 * avgTemp) / (avgTemp + 237.3)) *
+      (rh[i] / 100.0);
+
+    // Calculate saturation vapor pressure (kPa)
+    var es =
+      0.6108 * Math.exp((17.27 * avgMin[i]) / (avgMin[i] + 237.3)) +
+      0.6108 * Math.exp((17.27 * avgMax[i]) / (avgMax[i] + 237.3));
+
+    // Calculate net radiation (MJ/m^2/day)
+    var Rn = (1 - 0.23) * solarRad[i];
+
+    // Calculate mean daily air density (kg/m^3)
+    var rho = (1.293 * 101.3) / ((avgTemp + 273.16) * 287.0);
+
+    // Calculate wind speed at 2 m (m/s)
+    var u2 = 0.16 * wind[i];
+
+    // Calculate reference ET (mm/day)
+    var delta =
+      (4098 * (0.6108 * Math.exp((17.27 * avgMin[i]) / (avgMin[i] + 237.3)))) /
+      Math.pow(avgMin[i] + 237.3, 2); // Slope of the vapor pressure-temperature curve (kPa/°C)
+    var ETref =
+      (0.408 * delta * Rn +
+        ((gamma * 900) / (avgTemp + 273)) * u2 * (es - ea)) /
+        (delta + gamma * (1 + 0.34 * u2)) +
+      G / (rho * 1000); // Convert G from MJ/m^2/day to mm/day by dividing by (rho * 1000)
+
+    ETrefMonthly.push(ETref);
+  }
+
+  return ETrefMonthly;
+};
+
+const getVars = (data) => {
+  let n, avgMin, avgMax, rh, wind, solarRad, Tnext, Tknown;
+  n = Number(data.n);
+  avgMin = new Array(n);
+  avgMax = new Array(n);
+  rh = new Array(n);
+  wind = new Array(n);
+  solarRad = new Array(n);
+
+  data.temp_and_rh_data.forEach((day, i) => {
+    avgMin[i] = Number(day["Avg Min Temp (C)"]);
+    avgMax[i] = Number(day["Avg Max Temp (C)"]);
+    rh[i] = Number(day["Relative Humidity"]);
+  });
+
+  data.monthly_wind_speed_data.forEach((day, i) => {
+    let val = day["Monthly Wind Speed"];
+    val = Number(val);
+    wind[i] = val;
+  });
+
+  data.solar_radiation_data.forEach((day, i) => {
+    let val = day["Solar Radiation (Rs)"];
+    val = Number(val);
+    solarRad[i] = val;
+  });
+
+  Tknown = data["t(i+1"] !== undefined;
+  Tnext = data["t(i+1)"];
+
+  return {
+    avgMin,
+    avgMax,
+    rh,
+    wind,
+    solarRad,
+    Tnext,
+    Tknown
+  };
+};
+
 const MonthlyFAOMethod = () => {
   const onFinish = (data) => {
     console.log(data);
+
+    const { avgMin, avgMax, rh, wind, solarRad, Tnext, Tknown } = getVars(data);
+    const res = calculateMonthlyReferenceET(
+      avgMin,
+      avgMax,
+      rh,
+      wind,
+      solarRad,
+      Tnext,
+      Tknown
+    );
+
+    console.log(res);
   };
   return <DynamicForm config={config} onFinish={onFinish} />;
 };
 
 export default MonthlyFAOMethod;
+
+// avg min, max, rh, wind, solar rad, T(i+1) known or not
