@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react"; // the AG Grid React Component
 
 const GetTableInput = (props) => {
-  const initialData = useMemo(() => props.data, [props.data]);
-  const [values, setValues] = useState(initialData);
-
+  const [values, setValues] = useState(props.data);
   useEffect(() => {
+    if (props.data) return;
     const newData = Array.from({ length: props.n }, () =>
       props.variables.reduce((obj, variable) => {
         obj[variable] = 0;
@@ -13,7 +12,7 @@ const GetTableInput = (props) => {
       }, {})
     );
     setValues(newData);
-  }, [props.n, props.variables]);
+  }, [props.n, props.variables, props.data]);
 
   const handleCellValueChanged = (params) => {
     const newValues = [...values];
@@ -35,6 +34,10 @@ const GetTableInput = (props) => {
     cellEditable: true
   };
 
+  const onGridReady = (params) => {
+    params.api.sizeColumnsToFit();
+  };
+
   return (
     <div>
       <div>
@@ -49,6 +52,7 @@ const GetTableInput = (props) => {
           animateRows={true} // Optional - set to 'true' to have rows animate when sorted
           rowSelection="multiple" // Options - allows click selection of rows
           onCellValueChanged={handleCellValueChanged}
+          onGridReady={onGridReady}
         />
       </div>
     </div>

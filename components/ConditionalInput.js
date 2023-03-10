@@ -67,7 +67,7 @@ const ConditionalInput = ({ comps, title, options, onChange, formValues }) => {
           <b>{title}</b>
         </p>
       </div>
-      <div>
+      <div style={{ margin: "10px auto" }}>
         <RadioGroup
           value={selectedOption}
           onChange={(e) => setSelectedOption(e.currentTarget.value)}

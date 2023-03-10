@@ -4,6 +4,7 @@ import ConditionalInput from "./ConditionalInput";
 import GetTableInput from "./GetTableInput";
 import ListInput from "./ListInput";
 import OptionInput from "./OptionInput";
+import styles from "../styles/DynamicForm.module.css";
 
 const DynamicForm = ({ config, onFinish }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -65,18 +66,19 @@ const DynamicForm = ({ config, onFinish }) => {
           />
         );
       case "grid":
-        const data = formValues[step.name]
-          ? formValues[step.name]
-          : Array.from({ length: step.n ? step.n : formValues["n"] }, () =>
-              step.variables.reduce((obj, variable) => {
-                obj[variable] = 0;
-                return obj;
-              }, {})
-            );
+        // const data =
+        //   formValues[step.name] !== undefined
+        //     ? formValues[step.name]
+        //     : Array.from({ length: step.n ? step.n : formValues["n"] }, () =>
+        //         step.variables.reduce((obj, variable) => {
+        //           obj[variable] = 0;
+        //           return obj;
+        //         }, {})
+        //       );
         return (
           <GetTableInput
             title={step.title}
-            data={data}
+            data={formValues[step.name]}
             onChange={(value) => handleConditionalChange(step.name, value)}
             n={step.n ? step.n : formValues["n"]}
             variables={step.variables}
@@ -101,13 +103,26 @@ const DynamicForm = ({ config, onFinish }) => {
           return renderStepContent(step);
         })}
       </div>
-      {currentStep > 0 && <button onClick={handleBack}>Back</button>}
-      {currentStep < config.length - 1 && (
-        <button onClick={handleNext}>Next</button>
-      )}
-      {currentStep === config.length - 1 && (
-        <button onClick={() => onFinish(formValues)}>Submit</button>
-      )}
+      <div className={styles.actionBar}>
+        {currentStep > 0 && (
+          <button className={styles.button} onClick={handleBack}>
+            Back
+          </button>
+        )}
+        {currentStep < config.length - 1 && (
+          <button className={styles.button} onClick={handleNext}>
+            Next
+          </button>
+        )}
+        {currentStep === config.length - 1 && (
+          <button
+            className={styles.button}
+            onClick={() => onFinish(formValues)}
+          >
+            Submit
+          </button>
+        )}
+      </div>
     </div>
   );
 };

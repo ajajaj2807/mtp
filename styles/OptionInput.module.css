@@ -1,5 +1,6 @@
 .container {
-  padding: 10px 25px;
-  background: #eee;
+  padding: 10px 20px;
+  background: #f6f6f6;
   border-radius: 6px;
+  margin: 10px auto;
 }

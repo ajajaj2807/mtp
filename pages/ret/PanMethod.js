@@ -1,4 +1,7 @@
+import { useState } from "react";
 import DynamicForm from "../../components/DynamicForm";
+import Info from "../../components/Info";
+import Results from "../../components/Results";
 
 const config = [
   [
@@ -262,15 +265,7 @@ const getKpUnknown = (pan_type, pan_sitting, ws, fetch, rh) => {
 };
 
 const getPanCoefficient = (input_data) => {
-  const {
-    ws,
-    rh,
-    fetch,
-    pan_type,
-    pan_sitting,
-    pan_condition,
-    pan_evap_data
-  } = input_data;
+  const { ws, rh, fetch, pan_type, pan_sitting, pan_condition } = input_data;
 
   const wsn = Number(ws);
 
@@ -297,15 +292,39 @@ const getET = (Kp, EpanArray) => {
   return EtArray;
 };
 
+const infoTitle = "Info:";
+const infoContent =
+  "The pan evaporation method is a simple and widely used approach for estimating reference evapotranspiration (ET0), which is a measure of the amount of water that would be evaporated and transpired by a standardized reference crop under ideal environmental conditions. The pan evaporation method is based on the principle that the rate of water evaporation from a pan is related to the potential evapotranspiration from a nearby crop.";
+
 const PanMethod = () => {
-  const onFinish = (data) => {
-    console.log(data);
-    const Kp = getPanCoefficient(data);
-    console.log(Kp);
-    const result = getET(Kp, data.pan_evap_data);
-    console.log(result);
+  const [isResultOpen, setIsResultOpen] = useState(false);
+  const [res, setRes] = useState("");
+
+  const handleResultClose = () => {
+    setIsResultOpen(false);
   };
-  return <DynamicForm config={config} onFinish={onFinish} />;
+
+  const onFinish = (data) => {
+    const Kp = getPanCoefficient(data);
+    const result = getET(Kp, data.pan_evap_data);
+    setRes(result);
+    setIsResultOpen(true);
+  };
+
+  return (
+    <>
+      <Info title={infoTitle} content={infoContent} />
+      <DynamicForm config={config} onFinish={onFinish} />
+      <Results
+        isOpen={isResultOpen}
+        handleClose={handleResultClose}
+        title="Results"
+      >
+        <b>Yayy!!</b>
+        {res}
+      </Results>
+    </>
+  );
 };
 
 export default PanMethod;

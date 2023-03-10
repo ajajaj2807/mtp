@@ -7,13 +7,13 @@
   align-items: center;
   height: 100vh;
   gap: 20px;
-  width: 70%;
+  /* width: 70%; */
   margin: auto;
 }
 
 .title {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 600;
   text-align: center;
 }
@@ -28,20 +28,19 @@
 }
 
 .card {
-  padding: 10px 20px;
-  border: 2px solid #eef;
-  background: #eef;
+  padding: 4px 8px;
+  background: #3a86ff;
   border-radius: 6px;
-  font-size: 2.4rem;
+  font-size: 1.6rem;
   font-weight: 600;
   cursor: pointer;
-  color: #42e;
+  color: #fff;
   text-align: center;
 }
 
 .card:hover {
-  background: #efefff;
-  border: 2px solid #ccf;
+  background: #1a76df;
   transform: translateY(-2px);
   transition: 100ms all ease;
+  box-shadow: 1px 4px 8px #0a56af55;
 }

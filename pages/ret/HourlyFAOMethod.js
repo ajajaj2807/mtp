@@ -1,4 +1,5 @@
 import DynamicForm from "../../components/DynamicForm";
+import Info from "../../components/Info";
 
 const config = [
   [
@@ -187,7 +188,16 @@ const HourlyFAOMethod = () => {
 
     console.log(res);
   };
-  return <DynamicForm config={config} onFinish={onFinish} />;
+
+  const infoTitle = "Info:";
+  const infoContent =
+    "The FAO method, also known as the FAO56 Penman-Monteith method, is a widely used and well-established approach for calculating reference evapotranspiration (ET0), which is a measure of the amount of water that would be evaporated and transpired by a standardized reference crop under ideal environmental conditions. The FAO method is based on the Penman-Monteith equation, which takes into account various meteorological variables and crop characteristics. This submodule uses hourly time frame for calculating Reference Evapotranspiration.";
+  return (
+    <>
+      <Info title={infoTitle} content={infoContent} />
+      <DynamicForm config={config} onFinish={onFinish} />{" "}
+    </>
+  );
 };
 
 export default HourlyFAOMethod;

@@ -1,4 +1,5 @@
 import DynamicForm from "../../components/DynamicForm";
+import Info from "../../components/Info";
 
 const config = [
   [
@@ -71,11 +72,20 @@ const config = [
   ]
 ];
 
+const infoTitle = "Info:";
+const infoContent =
+  "When some of the required meteorological data is missing, the FAO56 Penman-Monteith method can still be used to calculate reference evapotranspiration (ET0) by estimating the missing variables using available data and standard equations. It is important to note that these estimation methods may introduce some errors and uncertainty in the ET0 calculation. It is therefore recommended to use actual measurements whenever possible to obtain the most accurate estimation of ET0.";
+
 const MissingDataFAOMethod = () => {
   const onFinish = (data) => {
     console.log(data);
   };
-  return <DynamicForm config={config} onFinish={onFinish} />;
+  return (
+    <>
+      <Info title={infoTitle} content={infoContent} />
+      <DynamicForm config={config} onFinish={onFinish} />{" "}
+    </>
+  );
 };
 
 export default MissingDataFAOMethod;
