@@ -1,5 +1,8 @@
+import { useState } from "react";
 import DynamicForm from "../../components/DynamicForm";
 import Info from "../../components/Info";
+import NumericTable from "../../components/NumericTable";
+import Results from "../../components/Results";
 
 const config = [
   [
@@ -104,11 +107,18 @@ const getVars = (data) => {
 };
 
 const HargreavesMethod = () => {
+  const [isResultOpen, setIsResultOpen] = useState(false);
+  const [res, setRes] = useState("");
+
+  const handleResultClose = () => {
+    setIsResultOpen(false);
+  };
+
   const onFinish = (data) => {
-    console.log(data);
     const { lat, maxTemps, minTemps } = getVars(data);
     const res = calculateRETHargreaves(lat, minTemps, maxTemps);
-    console.log(res);
+    setRes(res);
+    setIsResultOpen(true);
   };
 
   const infoTitle = "Info:";
@@ -118,6 +128,14 @@ const HargreavesMethod = () => {
     <>
       <Info title={infoTitle} content={infoContent} />
       <DynamicForm config={config} onFinish={onFinish} />{" "}
+      <Results
+        isOpen={isResultOpen}
+        handleClose={handleResultClose}
+        title="Results"
+      >
+        <b>Here are your results:</b>
+        <NumericTable data={res} />
+      </Results>
     </>
   );
 };

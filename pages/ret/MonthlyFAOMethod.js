@@ -1,5 +1,8 @@
+import { useState } from "react";
 import DynamicForm from "../../components/DynamicForm";
 import Info from "../../components/Info";
+import NumericTable from "../../components/NumericTable";
+import Results from "../../components/Results";
 
 const config = [
   [
@@ -201,11 +204,20 @@ const getVars = (data) => {
     rh[i] = Number(day["Actual Vapour Pressure"]);
   });
 
-  data.monthly_wind_speed_data.forEach((day, i) => {
-    let val = day["Monthly Wind Speed"];
-    val = Number(val);
-    wind[i] = val;
-  });
+  if (data["height_and_speed_data"]) {
+    data.height_and_speed_data.forEach((day, i) => {
+      const z = Number(day["Height (m)"]);
+      const uz = Number(day["Wind Speed (m/s)"]);
+      var u2 = (uz * 4.87) / Math.log(67.8 * z - 5.42);
+      wind[i] = u2;
+    });
+  } else {
+    data.monthly_wind_speed_data.forEach((day, i) => {
+      let val = day["Monthly Wind Speed"];
+      val = Number(val);
+      wind[i] = val;
+    });
+  }
 
   data.solar_radiation_data.forEach((day, i) => {
     let val = day["Solar Radiation (Rs)"];
@@ -228,9 +240,14 @@ const getVars = (data) => {
 };
 
 const MonthlyFAOMethod = () => {
-  const onFinish = (data) => {
-    console.log(data);
+  const [isResultOpen, setIsResultOpen] = useState(false);
+  const [res, setRes] = useState("");
 
+  const handleResultClose = () => {
+    setIsResultOpen(false);
+  };
+
+  const onFinish = (data) => {
     const { avgMin, avgMax, rh, wind, solarRad, Tnext, Tknown } = getVars(data);
     const res = calculateMonthlyReferenceET(
       avgMin,
@@ -242,7 +259,8 @@ const MonthlyFAOMethod = () => {
       Tknown
     );
 
-    console.log(res);
+    setRes(res);
+    setIsResultOpen(true);
   };
 
   const infoTitle = "Info:";
@@ -252,6 +270,14 @@ const MonthlyFAOMethod = () => {
     <>
       <Info title={infoTitle} content={infoContent} />
       <DynamicForm config={config} onFinish={onFinish} />{" "}
+      <Results
+        isOpen={isResultOpen}
+        handleClose={handleResultClose}
+        title="Results"
+      >
+        <b>Here are your results:</b>
+        <NumericTable data={res} />
+      </Results>
     </>
   );
 };

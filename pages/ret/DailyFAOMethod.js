@@ -1,5 +1,8 @@
+import { useState } from "react";
 import DynamicForm from "../../components/DynamicForm";
 import Info from "../../components/Info";
+import NumericTable from "../../components/NumericTable";
+import Results from "../../components/Results";
 
 const config = [
   [
@@ -160,11 +163,20 @@ const getVars = (data) => {
     maxRH[i] = Number(day["Max RH"]);
   });
 
-  data.daily_wind_speed_data.forEach((day, i) => {
-    let val = day["Daily Wind Speed"];
-    val = Number(val);
-    windSpeed[i] = val;
-  });
+  if (data["height_and_speed_data"]) {
+    data.height_and_speed_data.forEach((day, i) => {
+      const z = Number(day["Height (m)"]);
+      const uz = Number(day["Wind Speed (m/s)"]);
+      var u2 = (uz * 4.87) / Math.log(67.8 * z - 5.42);
+      windSpeed[i] = u2;
+    });
+  } else {
+    data.daily_wind_speed_data.forEach((day, i) => {
+      let val = day["Daily Wind Speed"];
+      val = Number(val);
+      windSpeed[i] = val;
+    });
+  }
 
   data.solar_radiation_data.forEach((day, i) => {
     let val = day["Solar Radiation (Rs)"];
@@ -184,6 +196,13 @@ const getVars = (data) => {
 };
 
 const DailyFAOMethod = () => {
+  const [isResultOpen, setIsResultOpen] = useState(false);
+  const [res, setRes] = useState("");
+
+  const handleResultClose = () => {
+    setIsResultOpen(false);
+  };
+
   const onFinish = (data) => {
     console.log(data);
 
@@ -206,7 +225,8 @@ const DailyFAOMethod = () => {
       solarRadiation
     );
 
-    console.log(res);
+    setRes(res);
+    setIsResultOpen(true);
   };
 
   const infoTitle = "Info:";
@@ -216,6 +236,14 @@ const DailyFAOMethod = () => {
     <>
       <Info title={infoTitle} content={infoContent} />
       <DynamicForm config={config} onFinish={onFinish} />{" "}
+      <Results
+        isOpen={isResultOpen}
+        handleClose={handleResultClose}
+        title="Results"
+      >
+        <b>Here are your results:</b>
+        <NumericTable data={res} />
+      </Results>
     </>
   );
 };

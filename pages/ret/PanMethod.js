@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DynamicForm from "../../components/DynamicForm";
 import Info from "../../components/Info";
+import NumericTable from "../../components/NumericTable";
 import Results from "../../components/Results";
 
 const config = [
@@ -320,8 +321,8 @@ const PanMethod = () => {
         handleClose={handleResultClose}
         title="Results"
       >
-        <b>Yayy!!</b>
-        {res}
+        <b>Here are your results:</b>
+        <NumericTable data={res} />
       </Results>
     </>
   );
