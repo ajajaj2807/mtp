@@ -21,3 +21,9 @@
   width: 40%;
   align-self: center;
 }
+
+.error {
+  color: red;
+  font-weight: 500;
+  font-size: 0.7rem;
+}
