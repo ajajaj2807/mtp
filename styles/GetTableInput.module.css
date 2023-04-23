@@ -1,3 +1,22 @@
 .container {
   height: "200px";
 }
+
+.errorWrapper {
+  background: whitesmoke;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.singleError {
+  font-size: 0.8rem;
+  color: red;
+}
+
+.singleError::before {
+  content: "> ";
+}
