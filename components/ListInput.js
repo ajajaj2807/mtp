@@ -36,9 +36,9 @@ const ListInput = ({ title, min, max, name, onChange, selectedValue }) => {
       </p>
       {
         <div className={styles.inputControl} key={name}>
-          <div className={styles.label} style={{ fontWeight: "bold" }}>
+          {/* <div className={styles.label} style={{ fontWeight: "bold" }}>
             {name}
-          </div>
+          </div> */}
           <div className={styles.input}>
             <Input
               value={selectedValue}

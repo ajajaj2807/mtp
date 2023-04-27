@@ -8,29 +8,29 @@ import PanMethod from "./PanMethod";
 
 const subModules = [
   {
-    title: "Pan Method",
-    comp: <PanMethod />
+    title: "ETo by Pan Method",
+    comp: <PanMethod />,
   },
   {
-    title: "Hargreaves Method",
-    comp: <HargreavesMethod />
+    title: "ETo by Hargreaves Method",
+    comp: <HargreavesMethod />,
   },
   {
-    title: "Hourly FAO Penman-Monteith Method",
-    comp: <HourlyFAOMethod />
+    title: "ETo by Hourly FAO Penman-Monteith Method",
+    comp: <HourlyFAOMethod />,
   },
   {
-    title: "Daily FAO Penman-Monteith Method",
-    comp: <DailyFAOMethod />
+    title: "ETo by Daily FAO Penman-Monteith Method",
+    comp: <DailyFAOMethod />,
   },
   {
-    title: "Monthly FAO Penman-Monteith Method",
-    comp: <MonthlyFAOMethod />
+    title: "ETo by Monthly FAO Penman-Monteith Method",
+    comp: <MonthlyFAOMethod />,
   },
   {
-    title: "Missing Data FAO Method",
-    comp: <MissingDataFAOMethod />
-  }
+    title: "ETo by Missing Data FAO Method",
+    comp: <MissingDataFAOMethod />,
+  },
 ];
 
 const Ret = () => {
