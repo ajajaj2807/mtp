@@ -20,6 +20,7 @@ const config = {
   "Avg Min Temp (C)": [5, 50],
   "Avg Max Temp (C)": [10, 65],
   "Actual Vapour Pressure": [0, 100],
+  "PE (mm/day)": [0, 40],
 };
 
 const GetTableInput = (props) => {

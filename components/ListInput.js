@@ -8,6 +8,8 @@ const config = {
   ws: [0, 30],
   rh: [0, 100],
   fetch: [1, 1000],
+  iw: [0, 30],
+  desired_r: [0, 1],
 };
 
 const checkLimit = (var_name, value) => {

@@ -5,7 +5,7 @@ import { AgGridReact } from "ag-grid-react";
 import { Button } from "baseui/button";
 import Chart from "./Chart";
 
-const NumericTable = ({ data }) => {
+const NumericTable = ({ data, type }) => {
   const columnDefs = [{ headerName: "Value", field: "value" }];
   const [isOpen, setIsOpen] = useState(false);
   const rowData = data.map((value, index) => ({ value, id: index }));
@@ -21,7 +21,7 @@ const NumericTable = ({ data }) => {
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: "10px"
+        gap: "10px",
       }}
     >
       <AgGridReact
@@ -31,7 +31,12 @@ const NumericTable = ({ data }) => {
       />
       <Button onClick={() => setIsOpen(true)}>Plot</Button>
       {isOpen && (
-        <Chart onClose={() => setIsOpen(false)} data={data} isOpen={isOpen} />
+        <Chart
+          onClose={() => setIsOpen(false)}
+          data={data}
+          isOpen={isOpen}
+          type={type}
+        />
       )}
     </div>
   );
