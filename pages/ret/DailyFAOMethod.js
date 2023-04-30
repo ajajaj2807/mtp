@@ -11,14 +11,14 @@ const config = [
       type: "list",
       title: "Calculation Period (days)",
       minValue: 0,
-      maxValue: 50
+      maxValue: 50,
     },
     {
       type: "grid",
       name: "temp_and_rh_data",
       title: "Input Daily Temperature and RH",
-      variables: ["Max Temp (C)", "Min Temp (C)", "Max RH", "Min RH"]
-    }
+      variables: ["Max Temp (C)", "Min Temp (C)", "Max RH", "Min RH"],
+    },
   ],
   [
     {
@@ -26,7 +26,7 @@ const config = [
       title: "Is Wind Speed at 2m height known?",
       options: [
         { key: 0, name: "Yes" },
-        { key: 1, name: "No" }
+        { key: 1, name: "No" },
       ],
       comps: [
         {
@@ -36,9 +36,9 @@ const config = [
               type: "grid",
               name: "daily_wind_speed_data",
               title: "Input Daily Wind Speed Data",
-              variables: ["Daily Wind Speed"]
-            }
-          ]
+              variables: ["Daily Wind Speed"],
+            },
+          ],
         },
         {
           case: "No",
@@ -47,12 +47,12 @@ const config = [
               type: "grid",
               name: "height_and_speed_data",
               title: "Input Height and Wind Speed Data",
-              variables: ["Height (m)", "Wind Speed (m/s)"]
-            }
-          ]
-        }
-      ]
-    }
+              variables: ["Height (m)", "Wind Speed (m/s)"],
+            },
+          ],
+        },
+      ],
+    },
   ],
   [
     {
@@ -61,7 +61,7 @@ const config = [
       options: [
         { key: 0, name: "Yes" },
         { key: 1, name: "No, but Sunshine duration is known" },
-        { key: 2, name: "No, but Sunshine duration is not known" }
+        { key: 2, name: "No, but Sunshine duration is not known" },
       ],
       comps: [
         {
@@ -71,13 +71,13 @@ const config = [
               type: "grid",
               name: "solar_radiation_data",
               title: "Input Solar Radiation Data",
-              variables: ["Solar Radiation (Rs)"]
-            }
-          ]
+              variables: ["Solar Radiation (Rs)"],
+            },
+          ],
         },
         {
           case: "No, but Sunshine duration is known",
-          data: []
+          data: [],
         },
         {
           case: "No, but Sunshine duration is not known",
@@ -85,13 +85,13 @@ const config = [
             {
               type: "info",
               title:
-                "INFO: Please Use Missing Data module for these conditions."
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                "INFO: Please Use Missing Data module for these conditions.",
+            },
+          ],
+        },
+      ],
+    },
+  ],
 ];
 
 const calculateDailyET0 = (
@@ -191,7 +191,7 @@ const getVars = (data) => {
     maxRH,
     minRH,
     windSpeed,
-    solarRadiation
+    solarRadiation,
   };
 };
 
@@ -206,15 +206,8 @@ const DailyFAOMethod = () => {
   const onFinish = (data) => {
     console.log(data);
 
-    const {
-      n,
-      maxTemp,
-      minTemp,
-      maxRH,
-      minRH,
-      windSpeed,
-      solarRadiation
-    } = getVars(data);
+    const { n, maxTemp, minTemp, maxRH, minRH, windSpeed, solarRadiation } =
+      getVars(data);
     const res = calculateDailyET0(
       n,
       maxTemp,
@@ -239,7 +232,7 @@ const DailyFAOMethod = () => {
       <Results
         isOpen={isResultOpen}
         handleClose={handleResultClose}
-        title="Results"
+        title="Results by Daily FAO Method"
       >
         <b>Here are your results:</b>
         <NumericTable data={res} />
