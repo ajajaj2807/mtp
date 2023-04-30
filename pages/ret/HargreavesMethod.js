@@ -11,22 +11,22 @@ const config = [
       title: "Latitude (degree)",
       type: "list",
       minValue: 0,
-      maxValue: 90
+      maxValue: 90,
     },
     {
       name: "n",
       type: "list",
       title: "Calculation Period (days)",
       minValue: 0,
-      maxValue: 50
+      maxValue: 50,
     },
     {
       type: "grid",
       name: "min_max_temp_data",
       title: "Input Min and Max Data",
-      variables: ["Max Temp (C)", "Min Temp (C)"]
-    }
-  ]
+      variables: ["Max Temp (C)", "Min Temp (C)"],
+    },
+  ],
 ];
 
 const calculateRETHargreaves = (latitude, maxTemps, minTemps) => {
@@ -131,7 +131,7 @@ const HargreavesMethod = () => {
       <Results
         isOpen={isResultOpen}
         handleClose={handleResultClose}
-        title="Results"
+        title="Results by Hargreaves Method"
       >
         <b>Here are your results:</b>
         <NumericTable data={res} />

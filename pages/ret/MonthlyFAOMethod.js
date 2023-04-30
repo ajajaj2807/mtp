@@ -273,7 +273,7 @@ const MonthlyFAOMethod = () => {
       <Results
         isOpen={isResultOpen}
         handleClose={handleResultClose}
-        title="Results"
+        title="Results by Monthly FAO Method"
       >
         <b>Here are your results:</b>
         <NumericTable data={res} />

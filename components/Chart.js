@@ -10,13 +10,13 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Label
+  Label,
 } from "recharts";
 
 const ChartModal = ({ data, isOpen, onClose }) => {
   const chartData = data.map((value, index) => ({
     name: index.toString(),
-    value
+    ETo: value,
   }));
 
   return (
@@ -36,7 +36,7 @@ const ChartModal = ({ data, isOpen, onClose }) => {
             <Legend />
             <Line
               type="monotone"
-              dataKey="value"
+              dataKey="ETo"
               stroke="#8884d8"
               activeDot={{ r: 8 }}
             />

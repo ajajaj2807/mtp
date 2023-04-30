@@ -8,10 +8,10 @@ const config = [
   [
     {
       type: "conditional",
-      title: "Are exact weather data known?",
+      title: "Are necessary weather data known?",
       options: [
         { key: 0, name: "Yes" },
-        { key: 1, name: "No" }
+        { key: 1, name: "No" },
       ],
       comps: [
         {
@@ -22,23 +22,23 @@ const config = [
               type: "list",
               title: "Wind Speed",
               minValue: 0,
-              maxValue: 50
+              maxValue: 50,
             },
             {
               name: "rh",
               type: "list",
               title: "Relative Humidity",
               minValue: 0,
-              maxValue: 50
+              maxValue: 50,
             },
             {
               name: "fetch",
               type: "list",
               title: "Fetch",
               minValue: 0,
-              maxValue: 50
-            }
-          ]
+              maxValue: 50,
+            },
+          ],
         },
         {
           case: "No",
@@ -50,8 +50,8 @@ const config = [
               options: [
                 { name: "Low (<40%)", key: 0 },
                 { name: "Medium (40 to 70%)", key: 1 },
-                { name: "High (>70%)", key: 2 }
-              ]
+                { name: "High (>70%)", key: 2 },
+              ],
             },
             {
               type: "option",
@@ -61,8 +61,8 @@ const config = [
                 { name: "Light (< 2m/s)", key: 0 },
                 { name: "Moderate (2 to 5 m/s)", key: 1 },
                 { name: "Strong (5 to 8 m/s)", key: 2 },
-                { name: "Very Strong (> 8m/s)", key: 3 }
-              ]
+                { name: "Very Strong (> 8m/s)", key: 3 },
+              ],
             },
             {
               type: "option",
@@ -72,13 +72,13 @@ const config = [
                 { name: "1m", key: 0 },
                 { name: "10m", key: 1 },
                 { name: "100m", key: 2 },
-                { name: "1000m", key: 3 }
-              ]
-            }
-          ]
-        }
-      ]
-    }
+                { name: "1000m", key: 3 },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ],
   [
     {
@@ -87,8 +87,8 @@ const config = [
       title: "Select Pan Type",
       options: [
         { name: "Class A Pan", key: 0 },
-        { name: "Colorado Sunken Pan", key: 1 }
-      ]
+        { name: "Colorado Sunken Pan", key: 1 },
+      ],
     },
     {
       type: "option",
@@ -96,9 +96,9 @@ const config = [
       title: "Select Pan Sitting",
       options: [
         { name: "Placed in a dry fallow area", key: 0 },
-        { name: "Placed in a short green crop", key: 1 }
-      ]
-    }
+        { name: "Placed in a short green crop", key: 1 },
+      ],
+    },
   ],
   [
     {
@@ -109,9 +109,9 @@ const config = [
         { name: "Pan painted with black", key: 0 },
         { name: "Pan not painted with black", key: 1 },
         { name: "Pan mounted with a screen", key: 2 },
-        { name: "Pan not mounted with a screen", key: 3 }
-      ]
-    }
+        { name: "Pan not mounted with a screen", key: 3 },
+      ],
+    },
   ],
   [
     {
@@ -119,9 +119,9 @@ const config = [
       name: "pan_evap_data",
       title: "Input Pan Evaporation Data",
       variables: ["Pan Evaporation Rate (mm/day)"],
-      n: 7
-    }
-  ]
+      n: 7,
+    },
+  ],
 ];
 
 const kp_values = {
@@ -131,41 +131,41 @@ const kp_values = {
         "Light (< 2m/s)": 0.7,
         "Moderate (2 to 5 m/s)": 0.6,
         "Strong (5 to 8 m/s)": 0.6,
-        "Very Strong (> 8m/s)": 0.5
+        "Very Strong (> 8m/s)": 0.5,
       },
       "Medium (40 to 70%)": {
         "Light (< 2m/s)": 0.8,
         "Moderate (2 to 5 m/s)": 0.75,
         "Strong (5 to 8 m/s)": 0.65,
-        "Very Strong (> 8m/s)": 0.55
+        "Very Strong (> 8m/s)": 0.55,
       },
       "High (>70%)": {
         "Light (< 2m/s)": 0.85,
         "Moderate (2 to 5 m/s)": 0.8,
         "Strong (5 to 8 m/s)": 0.7,
-        "Very Strong (> 8m/s)": 0.6
-      }
+        "Very Strong (> 8m/s)": 0.6,
+      },
     },
     "Placed in a dry fallow area": {
       "Low (<40%)": {
         "Light (< 2m/s)": 0.75,
         "Moderate (2 to 5 m/s)": 0.65,
         "Strong (5 to 8 m/s)": 0.65,
-        "Very Strong (> 8m/s)": 0.6
+        "Very Strong (> 8m/s)": 0.6,
       },
       "Medium (40 to 70%)": {
         "Light (< 2m/s)": 0.85,
         "Moderate (2 to 5 m/s)": 0.8,
         "Strong (5 to 8 m/s)": 0.7,
-        "Very Strong (> 8m/s)": 0.6
+        "Very Strong (> 8m/s)": 0.6,
       },
       "High (>70%)": {
         "Light (< 2m/s)": 0.85,
         "Moderate (2 to 5 m/s)": 0.8,
         "Strong (5 to 8 m/s)": 0.7,
-        "Very Strong (> 8m/s)": 0.6
-      }
-    }
+        "Very Strong (> 8m/s)": 0.6,
+      },
+    },
   },
   "Colorado Sunken Pan": {
     "Placed in a short green crop": {
@@ -173,42 +173,42 @@ const kp_values = {
         "Light (< 2m/s)": 1,
         "Moderate (2 to 5 m/s)": 0.85,
         "Strong (5 to 8 m/s)": 0.75,
-        "Very Strong (> 8m/s)": 0.65
+        "Very Strong (> 8m/s)": 0.65,
       },
       "Medium (40 to 70%)": {
         "Light (< 2m/s)": 1,
         "Moderate (2 to 5 m/s)": 0.85,
         "Strong (5 to 8 m/s)": 0.75,
-        "Very Strong (> 8m/s)": 0.7
+        "Very Strong (> 8m/s)": 0.7,
       },
       "High (>70%)": {
         "Light (< 2m/s)": 1,
         "Moderate (2 to 5 m/s)": 0.9,
         "Strong (5 to 8 m/s)": 0.75,
-        "Very Strong (> 8m/s)": 0.7
-      }
+        "Very Strong (> 8m/s)": 0.7,
+      },
     },
     "Placed in a dry fallow area": {
       "Low (<40%)": {
         "Light (< 2m/s)": 0.85,
         "Moderate (2 to 5 m/s)": 0.75,
         "Strong (5 to 8 m/s)": 0.65,
-        "Very Strong (> 8m/s)": 0.55
+        "Very Strong (> 8m/s)": 0.55,
       },
       "Medium (40 to 70%)": {
         "Light (< 2m/s)": 0.85,
         "Moderate (2 to 5 m/s)": 0.75,
         "Strong (5 to 8 m/s)": 0.65,
-        "Very Strong (> 8m/s)": 0.6
+        "Very Strong (> 8m/s)": 0.6,
       },
       "High (>70%)": {
         "Light (< 2m/s)": 0.85,
         "Moderate (2 to 5 m/s)": 0.75,
         "Strong (5 to 8 m/s)": 0.65,
-        "Very Strong (> 8m/s)": 0.65
-      }
-    }
-  }
+        "Very Strong (> 8m/s)": 0.65,
+      },
+    },
+  },
 };
 
 const getKpKnown = (pan_type, pan_sitting, ws, fetch, rh) => {
@@ -319,7 +319,7 @@ const PanMethod = () => {
       <Results
         isOpen={isResultOpen}
         handleClose={handleResultClose}
-        title="Results"
+        title="Results by Pan Method"
       >
         <b>Here are your results:</b>
         <NumericTable data={res} />
