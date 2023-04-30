@@ -13,10 +13,11 @@ import {
   Label,
 } from "recharts";
 
-const ChartModal = ({ data, isOpen, onClose }) => {
+const ChartModal = ({ data, isOpen, onClose, type }) => {
+  const labelY = type == "is" ? "Irrigation Required" : "Reference ET (ETo)";
   const chartData = data.map((value, index) => ({
     name: index.toString(),
-    ETo: value,
+    [labelY]: value,
   }));
 
   return (
@@ -29,14 +30,14 @@ const ChartModal = ({ data, isOpen, onClose }) => {
               <Label value="Day" offset={0} position="insideBottom" />
             </XAxis>
             <YAxis>
-              <Label angle={-90} value="Reference ET" position="insideLeft" />
+              <Label angle={-90} value={labelY} position="insideLeft" />
             </YAxis>
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip />
             <Legend />
             <Line
               type="monotone"
-              dataKey="ETo"
+              dataKey={labelY}
               stroke="#8884d8"
               activeDot={{ r: 8 }}
             />
